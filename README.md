@@ -22,10 +22,20 @@ $ java -javaagent:/path/to/gcjfrlog.jar=uri=http://localhost:9200/gcjfrlog-%y-%m
 
 ## Start agent
 
+### Start log shipping since process start
+
 Set path to `gcjfrlog-<version>.jar` to `-javaagent`
 
 ```
 $ java -javaagent:/path/to/gcjfrlog.jar=<option> ...
+```
+
+### Attach gcjfrlog to existing process
+
+You need to escape double-quote.
+
+```
+$ jcmd <PID> JVMTI.agent_load \"/path/tp/gcjfrlog.jar=<option>\"
 ```
 
 ## Option
@@ -43,15 +53,15 @@ $ java -javaagent:/path/to/gcjfrlog.jar=<option> ...
 
 You can use format strings in `uri`.
 
-* `%h'
+* `%h`
     * hostname
-* `%l'
+* `%l`
     * label
-* `%y'
+* `%y`
     * year (yyyy)
-* `%m'
+* `%m`
     * month (mm)
-* `%d'
+* `%d`
     * day (dd)
 
 # JFR events which are handled
