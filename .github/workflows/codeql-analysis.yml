@@ -46,7 +46,7 @@ jobs:
     - name: Build
       run: mvn package
       env:
-        JAVA_HOME=/opt/jdk-14.0.2
+        JAVA_HOME: /opt/jdk-14.0.2
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
