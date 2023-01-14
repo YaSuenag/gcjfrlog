@@ -1,4 +1,5 @@
 gcjfrlog
+![CodeQL](../../workflows/CodeQL/badge.svg)
 ===================
 
 gcjfrlog is Java agent to gather GC information via JFR Event Sreaming and to post them as JSON document via HTTP.
