@@ -30,13 +30,13 @@ jobs:
 
     - name: Java 14
       run: |
-        wget https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
+        wget -q https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
         tar xf openjdk-14.0.2_linux-x64_bin.tar.gz -C /opt/
 
     - name: Maven
       run: |
-        apt update
-        apt install -y maven
+        sudo apt update
+        sudo apt install -y maven
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
