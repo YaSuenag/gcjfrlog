@@ -28,15 +28,17 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Java 14
-      run: |
-        wget -q https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
-        tar xf openjdk-14.0.2_linux-x64_bin.tar.gz -C /opt/
+    - name: Download Java 14
+      run: wget -q https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
 
-    - name: Maven
-      run: |
-        sudo apt update
-        sudo apt install -y maven
+    - name: 'Setup Java'
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'jdkfile'
+        jdkFile: ./openjdk-14.0.2_linux-x64_bin.tar.gz
+        java-version: '14'
+        architecture: 'x64'
+        cache: 'maven'
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -46,9 +48,7 @@ jobs:
         queries: security-extended,security-and-quality
 
     - name: Build
-      run: mvn package
-      env:
-        JAVA_HOME: /opt/jdk-14.0.2
+      run: mvn -B package
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
