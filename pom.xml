@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  Copyright (C) 2020 Yasumasa Suenaga
+  Copyright (C) 2020, 2023, Yasumasa Suenaga
 
   This file is part of gcjfrlog.
 
@@ -23,7 +23,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.yasuenag</groupId>
     <artifactId>gcjfrlog</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
 
     <name>gcjfrlog</name>
