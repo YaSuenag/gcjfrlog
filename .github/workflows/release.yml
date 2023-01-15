@@ -26,23 +26,17 @@ jobs:
       - name: 'Run Maven'
         run: mvn -B package
 
-      - name: 'Setup environment variables'
+      - name: 'Setup environment variables for release'
         run: |
-          ASSET=$(find target/ -name 'gcjfrlog*.jar')
-          ASSET_NAME=$(echo $ASSET | cut -d '/' -f 2)
           TAG=$(echo ${{ github.ref }} | cut -d '/' -f 3)
-          URL=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG | jq -r .upload_url | cut -d '{' -f 1)
+          ASSET=$(find target/ -name 'gcjfrlog*.jar')
+          echo "TAG=$TAG" >> $GITHUB_ENV
           echo "ASSET=$ASSET" >> $GITHUB_ENV
-          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
-          echo "UPLOAD_URL=$URL" >> $GITHUB_ENV
         shell: bash
 
       - name: 'Upload Release Asset'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+        uses: AButler/upload-release-assets@v2.0
         with:
-          upload_url: ${{ env.UPLOAD_URL }}
-          asset_path: ${{ env.ASSET }}
-          asset_name: ${{ env.ASSET_NAME }}
-          asset_content_type: application/java-archive
+          release-tag: ${{ env.TAG }}
+          files: ${{ env.ASSET }}
+          repo-token: ${{ github.token }}
