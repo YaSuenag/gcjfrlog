@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Yasumasa Suenaga
+ * Copyright (C) 2020, 2023, Yasumasa Suenaga
  *
  * This file is part of gcjfrlog.
  *
@@ -255,6 +255,7 @@ public class LogShipper implements Runnable{
     "jdk.GarbageCollection"
   );
 
+  @Override
   public void run(){
     try(var rs = new RecordingStream()){
       HANDLED_EVENTS.forEach(e -> {
