@@ -1,0 +1,49 @@
+name: Publish package
+on:
+  release:
+    types: [created]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+
+    - name: Download Java 14
+      run: wget -q https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz
+
+    - name: 'Setup Java'
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'jdkfile'
+        jdkFile: ./openjdk-14.0.2_linux-x64_bin.tar.gz
+        java-version: '14'
+        architecture: 'x64'
+        cache: 'maven'
+
+    - name: 'Run Maven'
+      run: mvn -B package
+
+    - name: 'Setup environment variables'
+      run: |
+        ASSET=$(find target/ -name 'gcjfrlog*.jar')
+        ASSET_NAME=$(echo $ASSET | cut -d '/' -f 2)
+        TAG=$(echo ${{ github.ref }} | cut -d '/' -f 3)
+        URL=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/tags/$TAG | jq -r .upload_url | cut -d '{' -f 1)
+        echo "ASSET=$ASSET" >> $GITHUB_ENV
+        echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
+        echo "UPLOAD_URL=$URL" >> $GITHUB_ENV
+      shell: bash
+
+    - name: 'Upload Release Asset'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ env.UPLOAD_URL }}
+        asset_path: ${{ env.ASSET }}
+        asset_name: ${{ env.ASSET_NAME }}
+        asset_content_type: application/java-archive
