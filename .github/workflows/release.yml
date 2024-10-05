@@ -31,7 +31,7 @@ jobs:
         shell: bash
 
       - name: 'Upload Release Asset'
-        uses: AButler/upload-release-assets@v2.0
+        uses: AButler/upload-release-assets@v3.0
         with:
           release-tag: ${{ github.ref_name }}
           files: ${{ env.ASSET }}
